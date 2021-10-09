@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GeneralLibrary_Export.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ThreadPool.h" />

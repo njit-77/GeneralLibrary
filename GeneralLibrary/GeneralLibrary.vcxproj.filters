@@ -39,6 +39,9 @@
     <ClInclude Include="GeneralLibrary_Export.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
