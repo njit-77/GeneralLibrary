@@ -12,9 +12,9 @@
 #define USE_OPENCV
 #define USE_HALCON
 #define DEBUG_LOG
-#define THREAD_POOL
 
 
+#define Zero 1e-14
 #define DEBUG_IMAGE_PATH "./Pic/"
 #define MakeSurePathExists() {if (_access(DEBUG_IMAGE_PATH, 0) != 0){_mkdir(DEBUG_IMAGE_PATH);}}
 
@@ -85,8 +85,8 @@
 #include "HalconCpp.h"
 #include "HDevThread.h"
 
-#pragma comment(lib, "halconxl.lib")
-#pragma comment(lib, "halconcppxl.lib")
+#pragma comment(lib, "halcon.lib")
+#pragma comment(lib, "halconcpp.lib")
 
 using namespace HalconCpp;
 
@@ -103,6 +103,7 @@ using namespace HalconCpp;
 #define LOG_API __declspec(dllimport)
 #endif
 
+#define __solution__ "GeneralLibrary"
 LOG_API void LogTrace(const char* m, ...);
 LOG_API void LogDebug(const char* m, ...);
 LOG_API void LogInfo(const char* m, ...);
