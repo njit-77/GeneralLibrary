@@ -15,9 +15,22 @@
 
 
 #define Zero 1e-14
-#define DEBUG_IMAGE_PATH "./Pic/"
-#define MakeSurePathExists() {if (_access(DEBUG_IMAGE_PATH, 0) != 0){_mkdir(DEBUG_IMAGE_PATH);}}
-
+#define MakeSurePathExists(a)																				\
+{																											\
+	std::string dirPath(a);																					\
+	std::string path;																						\
+	for (int i = 0; i < dirPath.length(); ++i)																\
+	{																										\
+		if (dirPath[i] == '\\' || dirPath[i] == '/')														\
+		{																									\
+			path = dirPath.substr(0, i);																	\
+			if (_access(path.c_str(), 0) != 0)																\
+			{																								\
+				_mkdir(path.c_str());																		\
+			}																								\
+		}																									\
+	}																										\
+}
 
 /// LogError("File:%s, Line:%d, Function:%s.", __FILE__, __LINE__, __func__);
 /// #define STRINGIFY(x) "Line:"#x
