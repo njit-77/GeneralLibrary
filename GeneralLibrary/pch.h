@@ -123,12 +123,18 @@ LOG_API void LogInfo(const char* m, ...);
 LOG_API void LogWarn(const char* m, ...);
 LOG_API void LogError(const char* m, ...);
 LOG_API void LogCritical(const char* m, ...);
-LOG_API void SetLogTrace();
-LOG_API void SetLogDebug();
-LOG_API void SetLogInfo();
-LOG_API void SetLogWarn();
-LOG_API void SetLogError();
-LOG_API void SetLogCritical();
-LOG_API void SetLogOff();
+enum level_enum
+{
+	trace = 0,
+	debug = 1,
+	info = 2,
+	warn = 3,
+	err = 4,
+	critical = 5,
+	off = 6,
+};
+LOG_API void SetLogLevel(int level);
+LOG_API void SetLogFileName(const char* file_name);
+LOG_API void LogOutputSystemMessage();
 
 #endif // !DEBUG_LOG
