@@ -182,7 +182,6 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SystemMessage.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>

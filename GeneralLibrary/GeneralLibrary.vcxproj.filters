@@ -42,9 +42,6 @@
     <ClInclude Include="Math.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SystemMessage.h">
-      <Filter>lib</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
