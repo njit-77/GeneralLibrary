@@ -1,7 +1,8 @@
 #pragma once
 
-#include "pch.h"
+#include <mutex>
 
+#include "pch.h"
 
 class Math
 {
@@ -82,6 +83,11 @@ public:
 	static Math& GetInstance()
 	{
 		static Math m_instance;
+		static std::once_flag oc;
+		std::call_once(oc, []
+		{
+			SetSystem("reentrant", "true");
+		});
 		return m_instance;
 	}
 };
