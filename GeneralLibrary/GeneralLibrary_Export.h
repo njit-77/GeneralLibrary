@@ -16,4 +16,4 @@
 #endif
 
 
-#define Zero 1e-14
+#define GENERALLIBRARY_Zero 1e-14

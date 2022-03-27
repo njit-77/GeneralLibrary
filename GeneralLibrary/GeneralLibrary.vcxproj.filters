@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{9a7fba80-f736-499e-a825-4df238242c6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="version">
       <UniqueIdentifier>{35f3fd98-3422-46ca-b862-028d4fd2d71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{9a7fba80-f736-499e-a825-4df238242c6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="log.dll">
-      <Filter>lib</Filter>
+      <Filter>log</Filter>
     </None>
     <None Include="version.cmd">
       <Filter>version</Filter>
@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="log.lib">
-      <Filter>lib</Filter>
+      <Filter>log</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

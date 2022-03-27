@@ -123,6 +123,7 @@ LOG_API void LogInfo(const char* m, ...);
 LOG_API void LogWarn(const char* m, ...);
 LOG_API void LogError(const char* m, ...);
 LOG_API void LogCritical(const char* m, ...);
+/*
 enum level_enum
 {
 	trace = 0,
@@ -133,6 +134,7 @@ enum level_enum
 	critical = 5,
 	off = 6,
 };
+*/
 LOG_API void SetLogLevel(int level);
 LOG_API void SetLogFileName(const char* file_name);
 LOG_API void LogOutputSystemMessage();
