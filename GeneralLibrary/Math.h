@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-
 #include "pch.h"
 
 class Math
@@ -43,19 +41,19 @@ public:
 		cv::Point2f pc, cv::Point2f pd,
 		cv::Point2f& p)
 	{
-		/// Èý½ÇÐÎabc Ãæ»ýµÄ2±¶
+		/// ä¸‰è§’å½¢abc é¢ç§¯çš„2å€
 		float area_abc = (pa.x - pc.x) * (pb.y - pc.y) - (pa.y - pc.y) * (pb.x - pc.x);
-		/// Èý½ÇÐÎabd Ãæ»ýµÄ2±¶
+		/// ä¸‰è§’å½¢abd é¢ç§¯çš„2å€
 		float area_abd = (pa.x - pd.x) * (pb.y - pd.y) - (pa.y - pd.y) * (pb.x - pd.x);
-		/// Ãæ»ý·ûºÅÏàÍ¬ÔòÁ½µãÔÚÏß¶ÎÍ¬²à,²»Ïà½» (¶ÔµãÔÚÏß¶ÎÉÏµÄÇé¿ö,±¾Àýµ±×÷²»Ïà½»´¦Àí);
+		/// é¢ç§¯ç¬¦å·ç›¸åŒåˆ™ä¸¤ç‚¹åœ¨çº¿æ®µåŒä¾§,ä¸ç›¸äº¤ (å¯¹ç‚¹åœ¨çº¿æ®µä¸Šçš„æƒ…å†µ,æœ¬ä¾‹å½“ä½œä¸ç›¸äº¤å¤„ç†);
 		if (area_abc * area_abd > Zero)
 			return false;
 
-		/// Èý½ÇÐÎcda Ãæ»ýµÄ2±¶  
+		/// ä¸‰è§’å½¢cda é¢ç§¯çš„2å€  
 		float area_cda = (pc.x - pa.x) * (pd.y - pa.y) - (pc.y - pa.y) * (pd.x - pa.x);
-		/// Èý½ÇÐÎcdb Ãæ»ý¿ÉÓÃÆäËûÈý¸öÈý½ÇÐÎµÄÃæ»ýÇóµÃ£¬ÕâÀï¿¼ÂÇÁË¸÷¸öÈý½ÇÐÎÃæ»ýµÄÕý¸ººÅ
+		/// ä¸‰è§’å½¢cdb é¢ç§¯å¯ç”¨å…¶ä»–ä¸‰ä¸ªä¸‰è§’å½¢çš„é¢ç§¯æ±‚å¾—ï¼Œè¿™é‡Œè€ƒè™‘äº†å„ä¸ªä¸‰è§’å½¢é¢ç§¯çš„æ­£è´Ÿå·
 		float area_cdb = area_cda + area_abc - area_abd;
-		/// Ãæ»ý·ûºÅÏàÍ¬ÔòÁ½µãÔÚÏß¶ÎÍ¬²à,²»Ïà½» (¶ÔµãÔÚÏß¶ÎÉÏµÄÇé¿ö,±¾Àýµ±×÷²»Ïà½»´¦Àí);
+		/// é¢ç§¯ç¬¦å·ç›¸åŒåˆ™ä¸¤ç‚¹åœ¨çº¿æ®µåŒä¾§,ä¸ç›¸äº¤ (å¯¹ç‚¹åœ¨çº¿æ®µä¸Šçš„æƒ…å†µ,æœ¬ä¾‹å½“ä½œä¸ç›¸äº¤å¤„ç†);
 		if (area_cda * area_cdb > Zero)
 			return false;
 
@@ -71,14 +69,76 @@ public:
 		cv::Point2f point[4];
 		rotate_rect.points(point);
 
-		/// opencv 3.4.1ºÍ4.5.2°æ±¾ ¹ØÓÚRotatedRect.points¶¨Òå²»Í¬
-		/// opencv 3.4.1 point[0]ÊÇy×ø±ê×î´óÖµ£¬Èç¹û¾ØÐÎÆ½ÐÐ£¬ÔòxÖµ×îÐ¡µãÊÇ[0]
-		/// opencv 4.5.2 point[3]ÊÇy×ø±ê×î´óÖµ£¬Èç¹û¾ØÐÎÆ½ÐÐ£¬ÔòxÖµ×îÐ¡µãÊÇ[3]
+		/// opencv 3.4.1å’Œ4.5.2ç‰ˆæœ¬ å…³äºŽRotatedRect.pointså®šä¹‰ä¸åŒ
+		/// opencv 3.4.1 point[0]æ˜¯yåæ ‡æœ€å¤§å€¼ï¼Œå¦‚æžœçŸ©å½¢å¹³è¡Œï¼Œåˆ™xå€¼æœ€å°ç‚¹æ˜¯[0]
+		/// opencv 4.5.2 point[3]æ˜¯yåæ ‡æœ€å¤§å€¼ï¼Œå¦‚æžœçŸ©å½¢å¹³è¡Œï¼Œåˆ™xå€¼æœ€å°ç‚¹æ˜¯[3]
 		/// rotate_rect.size.width = distance_pp(point[0], point[3])
 		/// rotate_rect.size.height = distance_pp(point[0], point[1])
 		return point[3].x > point[1].x;
 	}
 
+	cv::Mat HObject2Mat(IN HObject& ho_Image)
+	{
+		cv::Mat img;
+		HTuple  hv_Channels;
+
+		ConvertImageType(ho_Image, &ho_Image, "byte");
+		CountChannels(ho_Image, &hv_Channels);
+		if (hv_Channels.I() == 1)
+		{
+			HTuple hv_Ptr, hv_Type, hv_Width, hv_Height;
+			GetImagePointer1(ho_Image, &hv_Ptr, &hv_Type, &hv_Width, &hv_Height);
+
+			img = cv::Mat(cv::Size(hv_Width, hv_Height), CV_8UC1);
+			unsigned char *pdata = (unsigned char *)hv_Ptr.L();
+			memcpy(img.data, pdata, hv_Width.I() * hv_Height.I());
+		}
+		else if (hv_Channels.I() == 3)
+		{
+			HTuple  hv_PtrR, hv_PtrG, hv_PtrB, hv_Type, hv_Width, hv_Height;
+			GetImagePointer3(ho_Image, &hv_PtrR, &hv_PtrG, &hv_PtrB, &hv_Type, &hv_Width, &hv_Height);
+
+			img = cv::Mat(cv::Size(hv_Width, hv_Height), CV_8UC3);
+
+			std::vector<cv::Mat> vecM(3);
+			vecM[0] = cv::Mat(cv::Size(hv_Width, hv_Height), CV_8UC1);
+			vecM[1] = cv::Mat(cv::Size(hv_Width, hv_Height), CV_8UC1);
+			vecM[2] = cv::Mat(cv::Size(hv_Width, hv_Height), CV_8UC1);
+			unsigned char *R = (unsigned char *)hv_PtrR.L();
+			unsigned char *G = (unsigned char *)hv_PtrG.L();
+			unsigned char *B = (unsigned char *)hv_PtrB.L();
+			memcpy(vecM[2].data, R, hv_Width.I() * hv_Height.I());
+			memcpy(vecM[1].data, G, hv_Width.I() * hv_Height.I());
+			memcpy(vecM[0].data, B, hv_Width.I() * hv_Height.I());
+			cv::merge(vecM, img);
+		}
+		return img;
+	}
+
+	HObject Mat2HObject(IN cv::Mat& img)
+	{
+		HObject ho_Image;
+		if (img.channels() == 4)
+		{
+			cv::cvtColor(img, img, cv::COLOR_BGRA2BGR);
+		}
+		if (img.channels() == 1)
+		{
+			GenImage1(&ho_Image, "byte", img.cols, img.rows, (Hlong)img.data);
+		}
+		else if (img.channels() == 3)
+		{
+			std::vector<cv::Mat> vecM;
+			cv::split(img, vecM);
+			cv::Mat imgB = vecM[0];
+			cv::Mat imgG = vecM[1];
+			cv::Mat imgR = vecM[2];
+			GenImage3(&ho_Image, "byte", img.cols, img.rows, (Hlong)imgR.data, (Hlong)imgG.data, (Hlong)imgB.data);
+		}
+
+		return ho_Image;
+	}	
+	
 public:
 	static Math& GetInstance()
 	{
