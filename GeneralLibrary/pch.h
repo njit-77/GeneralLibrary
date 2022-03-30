@@ -5,6 +5,7 @@
 
 // 添加要在此处预编译的标头
 #include "framework.h"
+#include <mutex>
 
 #endif //PCH_H
 
@@ -14,7 +15,7 @@
 #define DEBUG_LOG
 
 
-#define Zero 1e-14
+#define GeneralLibrary_Zero 1e-14
 #define MakeSurePathExists(a)																				\
 {																											\
 	std::string dirPath(a);																					\
