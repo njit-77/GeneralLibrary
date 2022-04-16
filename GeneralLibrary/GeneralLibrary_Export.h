@@ -15,5 +15,3 @@
 #define OUT
 #endif
 
-
-#define GeneralLibrary_Zero 1e-14

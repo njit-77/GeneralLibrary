@@ -46,7 +46,7 @@ public:
 		/// 三角形abd 面积的2倍
 		float area_abd = (pa.x - pd.x) * (pb.y - pd.y) - (pa.y - pd.y) * (pb.x - pd.x);
 		/// 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
-		if (area_abc * area_abd > GeneralLibrary_Zero)
+		if (area_abc * area_abd > FLT_EPSILON)
 			return false;
 
 		/// 三角形cda 面积的2倍  
@@ -54,7 +54,7 @@ public:
 		/// 三角形cdb 面积可用其他三个三角形的面积求得，这里考虑了各个三角形面积的正负号
 		float area_cdb = area_cda + area_abc - area_abd;
 		/// 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
-		if (area_cda * area_cdb > GeneralLibrary_Zero)
+		if (area_cda * area_cdb > FLT_EPSILON)
 			return false;
 
 		float t = area_cda / (area_abd - area_abc);
