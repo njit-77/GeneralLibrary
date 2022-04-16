@@ -15,7 +15,6 @@
 #define DEBUG_LOG
 
 
-#define GeneralLibrary_Zero 1e-14
 #define MakeSurePathExists(a)																				\
 {																											\
 	std::string dirPath(a);																					\
@@ -137,7 +136,6 @@ enum level_enum
 };
 */
 LOG_API void SetLogLevel(int level);
-LOG_API void SetLogFileName(const char* file_name);
-LOG_API void LogOutputSystemMessage();
+LOG_API void SetLogFileName(const char* file_name, HMODULE hModule);
 
 #endif // !DEBUG_LOG

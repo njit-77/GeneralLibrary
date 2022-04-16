@@ -11,8 +11,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_ATTACH:
 	{
 #ifdef DEBUG_LOG
-		SetLogFileName(__solution__);
-		LogOutputSystemMessage();
+		SetLogFileName(__solution__, hModule);
 #endif
 #if (defined(_DEBUG) && defined(CV))
 		cv::utils::logging::setLogLevel(cv::utils::logging::LOG_LEVEL_SILENT);
