@@ -12,25 +12,25 @@
 
 class ThreadPool
 {
-	/// ¶¨ÒåÀàĞÍ
+	/// å®šä¹‰ç±»å‹
 	using Task = std::function<void()>;
 
-	/// Ïß³Ì³Ø
+	/// çº¿ç¨‹æ± 
 	std::vector<std::thread> _pool;
 
-	/// ÈÎÎñ¶ÓÁĞ
+	/// ä»»åŠ¡é˜Ÿåˆ—
 	std::queue<Task> _tasks;
 
-	/// Í¬²½
+	/// åŒæ­¥
 	std::mutex _lock;
 
-	/// Ìõ¼ş×èÈû
+	/// æ¡ä»¶é˜»å¡
 	std::condition_variable _task_cv;
 
-	/// Ïß³Ì³ØÊÇ·ñÖ´ĞĞ
+	/// çº¿ç¨‹æ± æ˜¯å¦æ‰§è¡Œ
 	std::atomic<bool> _run{ true };
 
-	/// ¿ÕÏĞÏß³ÌÊıÁ¿
+	/// ç©ºé—²çº¿ç¨‹æ•°é‡
 	std::atomic<int>  _idlThrNum{ 0 };
 
 public:
@@ -38,83 +38,83 @@ public:
 	inline ~ThreadPool()
 	{
 		_run = false;
-		/// »½ĞÑËùÓĞÏß³ÌÖ´ĞĞ
+		/// å”¤é†’æ‰€æœ‰çº¿ç¨‹æ‰§è¡Œ
 		_task_cv.notify_all();
 		for (std::thread& thread : _pool)
 		{
-			/// ÈÃÏß³Ì¡°×ÔÉú×ÔÃğ¡±
+			/// è®©çº¿ç¨‹â€œè‡ªç”Ÿè‡ªç­â€
 			/// thread.detach();
 			if (thread.joinable())
-				/// µÈ´ıÈÎÎñ½áÊø£¬ Ç°Ìá£ºÏß³ÌÒ»¶¨»áÖ´ĞĞÍê
+				/// ç­‰å¾…ä»»åŠ¡ç»“æŸï¼Œ å‰æï¼šçº¿ç¨‹ä¸€å®šä¼šæ‰§è¡Œå®Œ
 				thread.join();
 		}
 	}
 
 public:
-	/// Ìá½»Ò»¸öÈÎÎñ
-	/// µ÷ÓÃ.get()»ñÈ¡·µ»ØÖµ»áµÈ´ıÈÎÎñÖ´ĞĞÍê,»ñÈ¡·µ»ØÖµ
-	/// ÓĞÁ½ÖÖ·½·¨¿ÉÒÔÊµÏÖµ÷ÓÃÀà³ÉÔ±£¬
-	/// Ò»ÖÖÊÇÊ¹ÓÃ   bind£º .commit(std::bind(&Dog::sayHello, &dog));
-	/// Ò»ÖÖÊÇÓÃ   mem_fn£º .commit(std::mem_fn(&Dog::sayHello), this)
+	/// æäº¤ä¸€ä¸ªä»»åŠ¡
+	/// è°ƒç”¨.get()è·å–è¿”å›å€¼ä¼šç­‰å¾…ä»»åŠ¡æ‰§è¡Œå®Œ,è·å–è¿”å›å€¼
+	/// æœ‰ä¸¤ç§æ–¹æ³•å¯ä»¥å®ç°è°ƒç”¨ç±»æˆå‘˜ï¼Œ
+	/// ä¸€ç§æ˜¯ä½¿ç”¨   bindï¼š .commit(std::bind(&Dog::sayHello, &dog));
+	/// ä¸€ç§æ˜¯ç”¨   mem_fnï¼š .commit(std::mem_fn(&Dog::sayHello), this)
 	template<class F, class... Args>
 	auto commit(F&& f, Args&&... args) ->std::future<decltype(f(args...))>
 	{
 		if (!_run)
 			throw std::runtime_error("commit on ThreadPool is stopped.");
 
-		/// typename std::result_of<F(Args...)>::type, º¯Êı f µÄ·µ»ØÖµÀàĞÍ
+		/// typename std::result_of<F(Args...)>::type, å‡½æ•° f çš„è¿”å›å€¼ç±»å‹
 		using RetType = decltype(f(args...));
 
-		/// °Ñº¯ÊıÈë¿Ú¼°²ÎÊı,´ò°ü(°ó¶¨)
+		/// æŠŠå‡½æ•°å…¥å£åŠå‚æ•°,æ‰“åŒ…(ç»‘å®š)
 		auto task = std::make_shared<std::packaged_task<RetType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
 
 		std::future<RetType> future = task->get_future();
 		{
-			/// Ìí¼ÓÈÎÎñµ½¶ÓÁĞ
-			/// ¶Ôµ±Ç°¿éµÄÓï¾ä¼ÓËølock_guardÊÇmutexµÄstack·â×°Àà£¬¹¹ÔìµÄÊ±ºòlock()£¬Îö¹¹µÄÊ±ºòunlock()
+			/// æ·»åŠ ä»»åŠ¡åˆ°é˜Ÿåˆ—
+			/// å¯¹å½“å‰å—çš„è¯­å¥åŠ é”lock_guardæ˜¯mutexçš„stackå°è£…ç±»ï¼Œæ„é€ çš„æ—¶å€™lock()ï¼Œææ„çš„æ—¶å€™unlock()
 			std::lock_guard<std::mutex> lock{ _lock };
 			_tasks.emplace([task]() {(*task)(); });
 		}
 
-		/// »½ĞÑÒ»¸öÏß³ÌÖ´ĞĞ
+		/// å”¤é†’ä¸€ä¸ªçº¿ç¨‹æ‰§è¡Œ
 		_task_cv.notify_one();
 
 		return future;
 	}
 
-	/// ¿ÕÏĞÏß³ÌÊıÁ¿
+	/// ç©ºé—²çº¿ç¨‹æ•°é‡
 	int idlCount() { return _idlThrNum; }
 
-	/// Ïß³ÌÊıÁ¿
+	/// çº¿ç¨‹æ•°é‡
 	size_t thrCount() { return _pool.size(); }
 
 private:
-	/// Ìí¼ÓÖ¸¶¨ÊıÁ¿µÄÏß³Ì
+	/// æ·»åŠ æŒ‡å®šæ•°é‡çš„çº¿ç¨‹
 	void addThread(unsigned short size)
 	{
 		for (; _pool.size() < THREADPOOL_MAX_NUM && size > 0; --size)
 		{
-			/// Ôö¼ÓÏß³ÌÊıÁ¿,µ«²»³¬¹ı Ô¤¶¨ÒåÊıÁ¿ THREADPOOL_MAX_NUM
-			_pool.emplace_back([this] { /// ¹¤×÷Ïß³Ìº¯Êı
+			/// å¢åŠ çº¿ç¨‹æ•°é‡,ä½†ä¸è¶…è¿‡ é¢„å®šä¹‰æ•°é‡ THREADPOOL_MAX_NUM
+			_pool.emplace_back([this] { /// å·¥ä½œçº¿ç¨‹å‡½æ•°
 				while (_run)
 				{
-					/// »ñÈ¡Ò»¸ö´ıÖ´ĞĞµÄ task
+					/// è·å–ä¸€ä¸ªå¾…æ‰§è¡Œçš„ task
 					Task task;
 					{
-						/// unique_lock Ïà±È lock_guard µÄºÃ´¦ÊÇ£º¿ÉÒÔËæÊ± unlock() ºÍ lock()
+						/// unique_lock ç›¸æ¯” lock_guard çš„å¥½å¤„æ˜¯ï¼šå¯ä»¥éšæ—¶ unlock() å’Œ lock()
 						std::unique_lock<std::mutex> lock{ _lock };
 						_task_cv.wait(lock, [this] {
 							return !_run || !_tasks.empty();
 						});
-						/// wait Ö±µ½ÓĞ task
+						/// wait ç›´åˆ°æœ‰ task
 						if (!_run && _tasks.empty())
 							return;
-						/// °´ÏÈ½øÏÈ³ö´Ó¶ÓÁĞÈ¡Ò»¸ö task
+						/// æŒ‰å…ˆè¿›å…ˆå‡ºä»é˜Ÿåˆ—å–ä¸€ä¸ª task
 						task = move(_tasks.front());
 						_tasks.pop();
 					}
 					_idlThrNum--;
-					/// Ö´ĞĞÈÎÎñ
+					/// æ‰§è¡Œä»»åŠ¡
 					task();
 					_idlThrNum++;
 				}
@@ -131,7 +131,7 @@ public:
 	}
 };
 
-/// ²âÊÔ´úÂë
+/// æµ‹è¯•ä»£ç 
 //#ifdef DEBUG_LOG
 //	LogTrace("%s In.", __func__);
 //#endif
