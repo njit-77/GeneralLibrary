@@ -1,7 +1,7 @@
 # GeneralLibrary
 C++ 动态库公用版本
 
-Visual Studio 2017 Community  
+Visual Studio 2022 Community  
 OpenCV 4.5.2  
 HALCON-18.11-Steady  
 
