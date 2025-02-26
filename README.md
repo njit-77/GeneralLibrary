@@ -1,16 +1,30 @@
 # GeneralLibrary
-C++ 动态库公用版本
+C++ 动态库公共版本
 
-Visual Studio 2022 Community  
-OpenCV 4.5.2  
-HALCON-18.11-Steady  
+#### 开发工具
 
-$(opencv_include)  
-C:\Program Files\opencv\include  
-$(opencv_lib)  
-C:\Program Files\opencv\x64\vc15\lib  
+```apl
+Visual Studio 2022 Community
+```
 
-$(halcon_include)  
-C:\Program Files\MVTec\HALCON-18.11-Steady\include;C:\Program Files\MVTec\HALCON-18.11-Steady\include\halconcpp  
-$(halcon_lib)  
-C:\Program Files\MVTec\HALCON-18.11-Steady\lib\x64-win64 
+
+
+#### 依赖项
+
+[OpenCV](https://opencv.org/)
+
+[HALCON](https://www.mvtec.com/products/halcon)
+
+[log](https://github.com/njit-77/log)
+
+
+
+#### 系统环境变量
+
+```apl
+$(opencv_include)  	C:\Program Files\opencv\include
+$(opencv_lib)  	    C:\Program Files\opencv\x64\vc15\lib
+
+$(halcon_include)	C:\Program Files\MVTec\HALCON\include;C:\Program Files\MVTec\HALCON\include\halconcpp
+$(halcon_lib)	    C:\Program Files\MVTec\HALCON\lib\x64-win64
+```
